@@ -51,9 +51,12 @@ namespace Gallery_art_3.Controllers
         // GET: artworks/Create
         public ActionResult Create()
         {
-            
-            ViewBag.cate_id = new SelectList(db.categories, "Id", "Name");
+            if (Session["idArtist"] != null)
+            {
+                ViewBag.cate_id = new SelectList(db.categories, "Id", "Name");
             return View();
+            }
+            return RedirectToAction("Login", "customers");
         }
 
         // POST: artworks/Create
@@ -63,8 +66,7 @@ namespace Gallery_art_3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Title,Price,Description,Year,img_path,artist_id,cate_id,status")] artwork artwork, HttpPostedFileBase uploadhinh)
         {
-            if (Session["idArtist"] != null)
-            {
+           
                 if (ModelState.IsValid)
                 {
                     int id = int.Parse(Session["idArtist"].ToString());
@@ -90,8 +92,7 @@ namespace Gallery_art_3.Controllers
                 ViewBag.artist_id = new SelectList(db.artists, "Id", "Certificate", artwork.artist_id);
                 ViewBag.cate_id = new SelectList(db.categories, "Id", "Name", artwork.cate_id);
                 return View(artwork);
-            }
-            return RedirectToAction("Login", "customers");
+           
         }
 
         // GET: artworks/Edit/5

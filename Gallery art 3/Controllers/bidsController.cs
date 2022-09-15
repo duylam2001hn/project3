@@ -39,6 +39,7 @@ namespace Gallery_art_3.Controllers
         // GET: bids/Create
         public ActionResult Create()
         {
+            
             ViewBag.Art_id = new SelectList(db.artworks, "Id", "Title");
             return View();
         }
@@ -55,6 +56,10 @@ namespace Gallery_art_3.Controllers
             string date_start = DateTime.Now.ToString();
             DateTime now = new DateTime();
             string date_end = now.AddDays(day_add).ToString();
+
+            bid.Date_start = date_start;
+            bid.Date_end = date_end;
+            bid.End_Price = 0;
             if (ModelState.IsValid)
             {
                 db.bids.Add(bid);
@@ -133,5 +138,7 @@ namespace Gallery_art_3.Controllers
             }
             base.Dispose(disposing);
         }
+
+        
     }
 }
