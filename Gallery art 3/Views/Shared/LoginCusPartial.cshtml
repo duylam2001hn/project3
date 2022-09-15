@@ -1,0 +1,17 @@
+﻿@if (Session["idUser"] !=null)
+{
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Xin chào " + Session["fullname"], "Index", "customers" ,routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li>@Html.ActionLink("Log out","Logout","customers")</li>
+        </ul>
+    
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "customers", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "customers", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

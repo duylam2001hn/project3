@@ -1,0 +1,77 @@
+﻿@model Gallery_art_3.Models.artist
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>artist</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.customer.FullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.customer.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.customer.City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.customer.City)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.customer.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.customer.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Certificate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Certificate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Style)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Style)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Expire_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expire_date)
+        </dd>
+
+    </dl>
+    
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index") |
+    @Html.ActionLink("Thêm tranh", "Create","artworks")|
+    @Html.ActionLink("Thêm đấu giá","Create","bids")
+</p>
