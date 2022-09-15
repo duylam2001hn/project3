@@ -26,5 +26,8 @@ namespace Gallery_art_3.Models
         public int Status { get; set; }
 
         public virtual artwork artwork { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Update_bidding> update_bidding { get; set; }
     }
 }

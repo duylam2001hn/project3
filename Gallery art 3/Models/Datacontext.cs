@@ -18,6 +18,8 @@ namespace Gallery_art_3.Models
         public virtual DbSet<category> categories { get; set; }
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<favorite_artwork> favorite_artwork { get; set; }
+
+        public virtual DbSet<Update_bidding> update_bidding { get; set; }
         public virtual DbSet<order_buy> order_buy { get; set; }
         public virtual DbSet<order_detail> order_detail { get; set; }
         public virtual DbSet<payment_method> payment_method { get; set; }
@@ -88,6 +90,11 @@ namespace Gallery_art_3.Models
                 .Property(e => e.Date_end)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<bid>()
+                .HasMany(e => e.update_bidding)
+                .WithOptional(e => e.bid)
+                .HasForeignKey(e => e.Bid_id);
+
             modelBuilder.Entity<category>()
                 .Property(e => e.Name)
                 .IsUnicode(false);
@@ -134,6 +141,11 @@ namespace Gallery_art_3.Models
                 .WithRequired(e => e.customer)
                 .HasForeignKey(e => e.Cus_id)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<customer>()
+                .HasMany(e => e.update_bidding)
+                .WithOptional(e => e.customer)
+                .HasForeignKey(e => e.Cus_id);
 
             modelBuilder.Entity<order_buy>()
                 .Property(e => e.Date_start)

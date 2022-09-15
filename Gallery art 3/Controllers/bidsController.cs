@@ -139,6 +139,6 @@ namespace Gallery_art_3.Controllers
             base.Dispose(disposing);
         }
 
-        
+      
     }
 }

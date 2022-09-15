@@ -181,6 +181,7 @@
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\TestHomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -199,6 +200,7 @@
     <Compile Include="Models\order_buy.cs" />
     <Compile Include="Models\order_detail.cs" />
     <Compile Include="Models\payment_method.cs" />
+    <Compile Include="Models\Update_bidding.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -284,6 +286,8 @@
     <Content Include="Views\bids\Details.cshtml" />
     <Content Include="Views\bids\Edit.cshtml" />
     <Content Include="Views\bids\Index.cshtml" />
+    <Content Include="Views\TestHome\Auction.cshtml" />
+    <Content Include="Views\TestHome\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

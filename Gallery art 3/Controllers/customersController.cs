@@ -306,6 +306,17 @@ namespace Gallery_art_3.Controllers
             return View(customer);
         }
 
+        //
+        public void Update_bidding()
+        {
+            Update_bidding update_Bidding = new Update_bidding();
+            if (Session["idUser"] != null)
+            {
+                int idcus = int.Parse(Session["idUser"].ToString());
+            }
+
+        }
+
     }
     
 }

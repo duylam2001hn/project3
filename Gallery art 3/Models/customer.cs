@@ -51,6 +51,9 @@ namespace Gallery_art_3.Models
         public virtual ICollection<favorite_artwork> favorite_artwork { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Update_bidding> update_bidding { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<order_buy> order_buy { get; set; }
     }
 }
