@@ -10,6 +10,7 @@ using Gallery_art_3.Models;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Mail;
 
 namespace Gallery_art_3.Controllers
 {
@@ -79,7 +80,7 @@ namespace Gallery_art_3.Controllers
                             return View("Register");
                         }
                         return RedirectToAction("becomeartist");
-                        //return RedirectToAction("Create","artistsController");
+                        
                         
                     }
                     ViewBag.Message = "The confirm password does not match";
@@ -118,13 +119,24 @@ namespace Gallery_art_3.Controllers
                     Session["FullName"] = datacus.FirstOrDefault().FullName;
                     Session["Email"] = datacus.FirstOrDefault().Email;
                     Session["idUser"] = datacus.FirstOrDefault().Id;
-                    int user_id = Int32.Parse(Session["idUser"].ToString());
+                    int user_id = int.Parse(Session["idUser"].ToString());
                     if(datacus.FirstOrDefault().artists.Count() > 0)
                     {
                         //from t in db.artists where t.Id == user_id
-                        var dataArtist = db.artists.Where(s=>s.Cus_id.Equals(user_id)) ; 
-                        Session["idArtist"] = dataArtist.FirstOrDefault().Id;
-                        return RedirectToAction("Details","artists");
+                        var dataArtist = db.artists.Where(s=>s.Cus_id.Equals(user_id)) ;
+
+                        int artist_id = dataArtist.FirstOrDefault().Id;
+                        int result = Time_end_artist(artist_id);
+                        if (result < 0)
+                        {
+                            Session["idArtist"] = dataArtist.FirstOrDefault().Id;
+                            return RedirectToAction("Details", "artists");
+
+                        }
+
+                       
+
+                        return RedirectToAction("Details");
                     }
                     return RedirectToAction("Details");
                 }
@@ -165,13 +177,13 @@ namespace Gallery_art_3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "FullName,Address,Email,Password,City")] customer customer)
+        public ActionResult Edit([Bind(Include = "Id,FullName,Address,Email,City")] customer customer)
         {
            if (ModelState.IsValid)
                 {
                   db.Entry(customer).State = EntityState.Modified;
                   db.SaveChanges();
-                  return RedirectToAction("Index");
+                  return RedirectToAction("Details");
                 }
             return View(customer);
         }
@@ -253,11 +265,19 @@ namespace Gallery_art_3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult becomeartist(string artist)
         {
-            int id_cus = db.customers.ToList().Last().Id;
-            if (Session["idUser"] != null)
+            
+            if (Session["idUser"] == null)
             {
-                id_cus = int.Parse(Session["idUser"].ToString());
+                int id_cus = db.customers.ToList().Last().Id;
+                Session["idUser"] = id_cus;
             }
+
+            int idcus = int.Parse(Session["idUser"].ToString());
+
+            var artist_exist = db.artists.Where(s => s.Cus_id.Equals(idcus)) ;
+            int count = artist_exist.Count();
+
+            var artist_art = db.artists.Find(artist_exist.FirstOrDefault().Id);
             
           
             DateTime now = DateTime.Now ;
@@ -266,56 +286,252 @@ namespace Gallery_art_3.Controllers
 
 
             DateTime expire = now.AddMonths(month);
-                Session["idUser"] = id_cus;
+                
                 Session["ExpireDate"] = expire;
 
-                
-           
-            return RedirectToAction("Create", "artists");
+            if (Session["idArtist"] != null)
+            {
+                int idArtist = int.Parse(Session["idArtist"].ToString()) ;
+                int result = Time_end_artist(idArtist);
+                var artist_expire = db.artists.Find(idArtist);
+                if (result < 0)
+                {
+                    DateTime expire_date_hientai = DateTime.Parse(artist_expire.Expire_date);
+                    string expire_new = expire_date_hientai.AddMonths(month).ToString();
+                    artist_expire.Expire_date = expire_new;
+                    db.Entry(artist_expire).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Details", "artists");
+                }
+            }else if(count == 1)
+            {
+                artist_art.Expire_date = expire.ToString();
+                db.Entry(artist_art).State = EntityState.Modified;
+                db.SaveChanges();
 
+            }
+           
+            return RedirectToAction("Logout");
+
+
+        }
+
+        public int Time_end_artist(int? id_artist)
+        {
+            DateTime time_now = DateTime.Now;
+            artist dbtime = db.artists.Find(id_artist);
+            DateTime endtime = DateTime.Parse(dbtime.Expire_date);
+
+
+            int result = DateTime.Compare(time_now, endtime);
+            return result;
+        }
+
+
+
+
+
+
+
+        //[HttpGet]
+        //public ActionResult ChangePassword(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    customer customer = db.customers.Find(id);
+        //    if (customer == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View("ChangePassword");
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult ChangePassword([Bind(Include = "Password")] customer customer)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(customer).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(customer);
+        //}
+
+
+        public bool SendMail(string _from, string _to, string _subject, string _body, SmtpClient client)
+        {
+            // Tạo nội dung Email
+            MailMessage message = new MailMessage(
+                from: _from,
+                to: _to,
+                subject: _subject,
+                body: _body
+            );
+            message.BodyEncoding = System.Text.Encoding.UTF8;
+            message.SubjectEncoding = System.Text.Encoding.UTF8;
+            message.IsBodyHtml = true;
+            message.ReplyToList.Add(new MailAddress(_from));
+            message.Sender = new MailAddress(_from);
+
+            try
+            {
+                client.Send(message);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                
+                return false;
+            }
+        }
+
+        public DateTime end_link_reset(int count)
+        {
+            
+            DateTime Link_recieve = DateTime.Now;
+            DateTime expire_link = Link_recieve.AddMinutes(2);
+
+            return expire_link;
 
         }
 
 
 
-        [HttpGet]
-        public ActionResult ChangePassword(int? id)
+
+        //forgot password
+        public ActionResult ForgotPassword()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            customer customer = db.customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View("ChangePassword");
+            return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword([Bind(Include = "Password")] customer customer)
+        public ActionResult ForgotPassword(ForgotPasswordView customer)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(customer).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //var user = await UserManager.FindByNameAsync(model.Email);
+
+                var cus = db.customers.Where(s => s.Email.Equals(customer.Email));
+
+
+                int exist_cus = cus.Count();
+                
+
+                if (exist_cus == 0)
+                {
+                    return View("ForgotPasswordConfirmation");
+                }
+                
+                
+
+                string expire_link  = end_link_reset(exist_cus).ToString();
+
+                string email_from = "duylam2001hn@gmail.com";
+                var email_to = customer.Email;
+                string password_app = "kpxdjruhrwhajugf";
+                string Title = "Reset Password";
+                SmtpClient SmtpMail = new SmtpClient();
+                
+                
+                
+                SmtpMail.Host = "smtp.gmail.com";
+                SmtpMail.Port = 587;
+                SmtpMail.EnableSsl = true;
+                SmtpMail.DeliveryMethod = SmtpDeliveryMethod.Network;
+                
+                SmtpMail.UseDefaultCredentials = false;
+                SmtpMail.Credentials = new NetworkCredential(email_from, password_app);
+                var callbackUrl = Url.Action("ResetPassword","customers", new { time = expire_link }, protocol: Request.Url.Scheme);
+                string content = "From Gallery Art . Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
+                var result = SendMail(email_from, email_to, Title, content,SmtpMail);
+
+               if(result == true)
+                {
+                    return RedirectToAction("ForgotPasswordConfirmation");
+                }
+                    
+ 
+                //string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                //var callbackUrl = Url.Action("ResetPassword", "Account", new { cusId = id_cus}, protocol: Request.Url.Scheme);
+                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
+
+            // If we got this far, something failed, redisplay form
             return View(customer);
         }
 
-        //
-        public void Update_bidding()
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation()
         {
-            Update_bidding update_Bidding = new Update_bidding();
-            if (Session["idUser"] != null)
+            return View();
+        }
+
+
+        //Reset Password
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string time)
+        {
+            DateTime now = DateTime.Now;
+            DateTime expire = DateTime.Parse(time);
+
+            if(expire < now)
             {
-                int idcus = int.Parse(Session["idUser"].ToString());
+                return View("ForgotPassword");
+            }
+           
+            return View();
+        }
+
+        //
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPasswordView customer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(customer);
+            }
+            var cus = db.customers.Where(s=>s.Email.Equals(customer.Email));
+            if (cus == null)
+            {
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
 
+            int cus_id = cus.FirstOrDefault().Id;
+            var cus_new_pass = db.customers.Find(cus_id);
+            var new_pass_hash = passwordHash(customer.Password);
+            cus_new_pass.Password = new_pass_hash;
+            db.Entry(cus_new_pass).State = EntityState.Modified;
+            if (customer.ConfirmPassword == customer.Password)
+            {
+                db.SaveChanges();
+                return RedirectToAction("ResetPasswordConfirmation");
+            }
+            
+            return View();
         }
+
+
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
 
     }
     

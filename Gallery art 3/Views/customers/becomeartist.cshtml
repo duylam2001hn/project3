@@ -6,27 +6,39 @@
     @using (Html.BeginForm("becomeartist", "customers", FormMethod.Post, new { @id = "Form1" }))
     {
         @Html.AntiForgeryToken()
-        <div class="form-horizontal">
-            <h4>Bạn muốn thuê triển lãm trong bao lâu ?</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <div class="col-md-10">
-                    <label>1 month</label>
-                    <input type="radio" name="expire" value="1" required />
-                    <label>12 month</label>
-                    <input type="radio" name="expire" value="12" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Xác Nhận" class="btn btn-default" />
-                </div>
-            </div>
-        
-
-            @Html.ActionLink("Back to Login", "Logout", "customers")
+<div class="form-horizontal">
+    <h4>Bạn muốn thuê triển lãm trong bao lâu ?</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-10">
+            <label>1 month</label>
+            <input type="radio" name="expire" value="1" required />
+            <label>12 month</label>
+            <input type="radio" name="expire" value="12" />
         </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Xác Nhận" class="btn btn-default" />
+        </div>
+    </div>
+
+    @if (Session["idUser"] != null && Session["idArtist"]==null)
+    {
+        @Html.ActionLink("Back to Details", "Details", "customers")
+    }
+    else if (Session["idArtist"] != null)
+    {
+        @Html.ActionLink("Back to Details", "Details", "artists")
+    }
+
+    else
+    {
+        @Html.ActionLink("Back to Login", "Logout", "customers")
+    }
+
+</div>
     }
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

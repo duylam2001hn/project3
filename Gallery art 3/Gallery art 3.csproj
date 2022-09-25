@@ -50,6 +50,12 @@
       <HintPath>..\packages\DataAnnotationsExtensions.5.0.1.27\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -178,7 +184,6 @@
     <Compile Include="Controllers\artworksController.cs" />
     <Compile Include="Controllers\bidsController.cs" />
     <Compile Include="Controllers\customersController.cs" />
-    <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TestHomeController.cs" />
@@ -194,8 +199,10 @@
     <Compile Include="Models\category.cs" />
     <Compile Include="Models\customer.cs" />
     <Compile Include="Models\CustomerManagement.cs" />
-    <Compile Include="Models\Datacontext1.cs" />
+    <Compile Include="Models\FileUploadCheck.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\compareList.cs" />
+    <Compile Include="Models\ManagePass.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\order_buy.cs" />
     <Compile Include="Models\order_detail.cs" />
@@ -210,6 +217,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -275,7 +283,6 @@
     <Content Include="Views\artists\Edit.cshtml" />
     <Content Include="Views\artists\Index.cshtml" />
     <Content Include="Views\customers\becomeartist.cshtml" />
-    <Content Include="Views\FileUpload\UploadFiles.cshtml" />
     <Content Include="Views\artworks\Create.cshtml" />
     <Content Include="Views\artworks\Delete.cshtml" />
     <Content Include="Views\artworks\Details.cshtml" />
@@ -287,7 +294,11 @@
     <Content Include="Views\bids\Edit.cshtml" />
     <Content Include="Views\bids\Index.cshtml" />
     <Content Include="Views\TestHome\Auction.cshtml" />
-    <Content Include="Views\TestHome\Index.cshtml" />
+    <Content Include="Views\TestHome\Artwork.cshtml" />
+    <Content Include="Views\customers\ForgotPassword.cshtml" />
+    <Content Include="Views\customers\ResetPassword.cshtml" />
+    <Content Include="Views\customers\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\customers\ForgotPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -17,21 +17,20 @@
         <dd>
             @Html.DisplayFor(model => model.artwork.Title)
         </dd>
+        <dt>
+           
+        </dt>
 
+        <dd>
+            <img src="~/@Model.artwork.img_path" style="width:300px;height:300px" />
+            <span id="result">Xin chào</span>
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Start_Price)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Start_Price)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.End_Price)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.End_Price)
         </dd>
 
         <dt>
@@ -50,17 +49,45 @@
             @Html.DisplayFor(model => model.Date_end)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
     </dl>
+
+    @using (Html.BeginForm("Update_bidding", "bids",FormMethod.Post))
+    {
+        <label>Giá của bạn</label>
+        <input type="hidden" value="@Model.Id" name="id" />
+        <input type="number" min="@Model.Start_Price" name="giathau"/>
+        <button type="submit">Đấu giá</button>
+    }
+    <button id="click">Tình hình đấu giá</button>
+
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#click").click(function () {
+            $.ajax({
+                url:'@Url.Action("update_bid_new","bids")',
+                type: "Get",
+                dataType: "Json",
+                contentType: 'application/json',
+                data: { id : @Model.Id},
+                success: function (result) {
+                    $("#result").html(result);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+
+
+            })
+
+
+        })
+
+    })
+
+</script>

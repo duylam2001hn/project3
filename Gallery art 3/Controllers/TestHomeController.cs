@@ -15,34 +15,54 @@ namespace Gallery_art_3.Controllers
         // GET: TestHome
 
         private Datacontext db = new Datacontext();
-        public ActionResult Index()
+        public ActionResult Artwork(string search)
         {
-           ;
-
-            //foreach (var artwork in )
-            //{
-            //    ViewBag.img = artwork.img_path;
-            //    ViewBag.title = artwork.Title;
-            //    ViewBag.Price = artwork.Price;
-            //    ViewBag.Artist = artwork.artist.customer.FullName;
-            //    ViewBag.Year = artwork.Year;
-            //}    
-            return View(db.artworks.ToList());
-        }
-
-        public ActionResult Auction()
-        {
-            var bid = db.bids.ToList();
-
-            foreach (var bids in bid)
-            {
-                ViewBag.img = bids.artwork.img_path;
-                ViewBag.title = bids.artwork.Title;
-                ViewBag.Year = bids.artwork.Year;
-                ViewBag.StartPrice = bids.Start_Price;
-                ViewBag.Artist = bids.artwork.artist.customer.FullName;
+            var data = db.artworks.ToList().Where(s => s.status.Equals(0));
+             if (!String.IsNullOrEmpty(search)){
+                data = data.Where(
+                    s=>s.Title.Contains(search) || 
+                       s.Description.Contains(search) ||
+                       s.artist.customer.FullName.Contains(search)
+                    );
             }
-            return View();
+
+            return View(data);
         }
+
+        public ActionResult Auction(string search)
+        {
+            var data = db.bids.Where(s=>s.artwork.status.Equals(2) ||
+            s.artwork.status.Equals(1)
+            
+            ).ToList();
+
+            
+            if (!String.IsNullOrEmpty(search))
+            {
+                data = data.Where(
+                    s => s.artwork.Title.Contains(search) ||
+                       s.artwork.Description.Contains(search) ||
+                       s.artwork.artist.customer.FullName.Contains(search)
+                    ).ToList();
+            }
+            return View(data);
+        }
+
+        public void filter_Price()
+        {
+            int Price_first = 500;
+            int Price_second = 1000;
+            int Price_third = 1500;
+            int Price_last = 2000;
+
+            var price = db.artworks;
+        }
+
+      
+
+       
+
+      
+       
     }
 }

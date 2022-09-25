@@ -16,6 +16,7 @@ namespace Gallery_art_3.Models
             artists = new HashSet<artist>();
             favorite_artwork = new HashSet<favorite_artwork>();
             order_buy = new HashSet<order_buy>();
+            update_bidding = new HashSet<Update_bidding>();
         }
 
         public int Id { get; set; }
@@ -35,7 +36,7 @@ namespace Gallery_art_3.Models
         [RegularExpression(@"^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-??]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$", ErrorMessage = "Email is not valid")]
         public string Email { get; set; }
 
-        [Required]
+        
         [StringLength(100)]
         [DataType(DataType.Password)]
         public string Password { get; set; }

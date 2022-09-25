@@ -107,3 +107,7 @@ D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\obj\Debug\Gallery art
 D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\obj\Debug\Gallery art 3.dll
 D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\obj\Debug\Gallery art 3.pdb
 D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\DataAnnotationsExtensions.dll
+D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.dll
+D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.Mvc.dll
+D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.xml
+D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.Mvc.xml

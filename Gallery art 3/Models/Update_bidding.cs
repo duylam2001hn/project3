@@ -13,6 +13,9 @@
 
         public int? Bid_id { get; set; }
 
+        public string Time_update { get; set; }
+        public string Amount { get; set; }
+
         public virtual bid bid { get; set; }
 
         public virtual customer customer { get; set; }

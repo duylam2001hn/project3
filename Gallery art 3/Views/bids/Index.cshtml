@@ -26,9 +26,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Date_end)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
+   
         <th></th>
     </tr>
 
@@ -50,7 +48,7 @@
             @Html.DisplayFor(modelItem => item.Date_end)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Status)
+            @Html.DisplayFor(modelItem => item.artwork.status)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

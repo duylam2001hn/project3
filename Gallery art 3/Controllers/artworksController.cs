@@ -8,6 +8,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Gallery_art_3.Models;
+using PagedList;
+
 
 namespace Gallery_art_3.Controllers
 {
@@ -16,31 +18,38 @@ namespace Gallery_art_3.Controllers
         private Datacontext db = new Datacontext();
 
         // GET: artworks
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            int status = 0;
-            var artwork = db.artworks.ToList();
-
-            foreach (var item in artwork)
+            if (Session["idArtist"] != null)
             {
-                status = item.status;
+
+                if (page == null) page = 1;
+
+                int artist_id = int.Parse(Session["idArtist"].ToString());
+
+                var artworks = db.artworks.Where(s => s.artist_id == artist_id).OrderBy(s=>s.Id);
+                int pageSize = 4;
+
+                int pageNumber = (page ?? 1);
+                return View(artworks.ToPagedList(pageNumber,pageSize));
             }
-
-            artwork_status(status);
-
-            var artworks = db.artworks.Include(a => a.artist).Include(a => a.category);
-           
-            return View(artworks.ToList());
+            return RedirectToAction("Login","customers");
+            
         }
 
         // GET: artworks/Details/5
         public ActionResult Details(int? id)
         {
+            int? id_artwork = id;
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+
             }
-            artwork artwork = db.artworks.Find(id);
+            artwork artwork = db.artworks.Find(id_artwork);
+           ViewBag.Status = artwork_status(artwork.status);
             if (artwork == null)
             {
                 return HttpNotFound();
@@ -76,9 +85,30 @@ namespace Gallery_art_3.Controllers
                     {
                         var findArtist = db.artists.Where(s => s.Id.Equals(id)).ToList();
                         string nameArtist = findArtist.FirstOrDefault().customer.FullName;
+                    string dt = DateTime.Now.ToString("MM_dd_yyyy_hh_mm_ss");
+
+
+                    //Validate 
+
+                    string fileName = uploadhinh.FileName; // getting File Name
+
+                    string fileContentType = uploadhinh.ContentType; // getting ContentType
+
+                    byte[] tempFileBytes = new byte[uploadhinh.ContentLength]; // getting filebytes
+
+                    var data = uploadhinh.InputStream.Read(tempFileBytes, 0, Convert.ToInt32(uploadhinh.ContentLength));
+
+                    var types = FileUploadCheck.FileType.Image; // Setting Image type
+
+                    var result = FileUploadCheck.isValidFile(tempFileBytes, types, fileContentType); //Calling isValidFile method
+
+
+                    if(result == true)
+                    {
                         string _FileName = "";
+                        //var type = MvcSecurity.Filters.FileUploadCheck.FileType.Image;
                         int index = uploadhinh.FileName.IndexOf('.');
-                        _FileName = "Artist" + nameArtist + "." + uploadhinh.FileName.Substring(index + 1);
+                        _FileName = "Artist" + nameArtist + dt + "." + uploadhinh.FileName.Substring(index + 1);
                         string _path = Path.Combine(Server.MapPath("~/Upload/Artwork"), _FileName);
                         uploadhinh.SaveAs(_path);
                         string imgpath = "Upload/Artwork/" + _FileName;
@@ -86,6 +116,9 @@ namespace Gallery_art_3.Controllers
                         db.artworks.Add(artwork);
                         db.SaveChanges();
                         return RedirectToAction("Index");
+                    }
+
+                    return RedirectToAction("Create");
                     }
                 }
 
@@ -107,7 +140,8 @@ namespace Gallery_art_3.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.artist_id = new SelectList(db.artists, "Id", "Certificate", artwork.artist_id);
+            Session["imgpath"] = artwork.img_path;
+            //ViewBag.artist_id = new SelectList(db.artists, "Id", "Certificate", artwork.artist_id);
             ViewBag.cate_id = new SelectList(db.categories, "Id", "Name", artwork.cate_id);
             return View(artwork);
         }
@@ -117,15 +151,44 @@ namespace Gallery_art_3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Price,Description,Year,img_path,artist_id,cate_id,status")] artwork artwork)
+        public ActionResult Edit([Bind(Include = "Id,Title,Price,Description,Year,artist_id,cate_id,status")] artwork artwork,HttpPostedFileBase uploadhinh)
         {
+           
             if (ModelState.IsValid)
             {
-                db.Entry(artwork).State = EntityState.Modified;
+
+                artwork edit_data = db.artworks.Find(artwork.Id);
+                edit_data.cate_id = artwork.cate_id;
+                edit_data.Year = artwork.Year;
+                edit_data.Title = artwork.Title;
+                edit_data.Description = artwork.Description;
+                if(artwork.status == 0)
+                {
+                    int id = int.Parse(Session["idArtist"].ToString());
+                    if (uploadhinh != null && uploadhinh.ContentLength > 0)
+                    {
+                        var findArtist = db.artists.Where(s => s.Id.Equals(id)).ToList();
+                        string nameArtist = findArtist.FirstOrDefault().customer.FullName;
+                        string dt = DateTime.Now.ToString("MM_dd_yyyy_hh_mm_ss");
+
+                        string _FileName = "";
+                        int index = uploadhinh.FileName.IndexOf('.');
+                        _FileName = "Artist" + nameArtist + dt + "." + uploadhinh.FileName.Substring(index + 1);
+                        string _path = Path.Combine(Server.MapPath("~/Upload/Artwork"), _FileName);
+                        uploadhinh.SaveAs(_path);
+                        string imgpath = "Upload/Artwork/" + _FileName;
+
+                        edit_data.img_path = imgpath;
+                    }
+                    
+                }
+
+                db.Entry(edit_data).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
+
             }
-            ViewBag.artist_id = new SelectList(db.artists, "Id", "Certificate", artwork.artist_id);
+            
             ViewBag.cate_id = new SelectList(db.categories, "Id", "Name", artwork.cate_id);
             return View(artwork);
         }
@@ -138,7 +201,7 @@ namespace Gallery_art_3.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             artwork artwork = db.artworks.Find(id);
-            artwork_status(artwork.status);
+            ViewBag.Status= artwork_status(artwork.status);
             if (artwork == null)
             {
                 return HttpNotFound();
@@ -166,21 +229,23 @@ namespace Gallery_art_3.Controllers
             base.Dispose(disposing);
         }
 
-        public void artwork_status(int status)
+        
+
+        public string artwork_status(int status)
         {
 
-            
-            if(status == 2)
+            if (status == 2)
             {
-                ViewBag.Status = "Đang đấu giá";
-            }else if(status == 1)
+                return "Đang đấu giá";
+            }
+            else if (status == 1)
             {
-                ViewBag.Status = "Đã bán";
+                return "Đã bán";
             }
             else
             {
-                ViewBag.Status = "Đang bán";
+                return "Đang bán";
             }
-        } 
+        }
     }
 }

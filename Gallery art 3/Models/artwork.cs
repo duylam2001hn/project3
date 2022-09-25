@@ -22,18 +22,19 @@ namespace Gallery_art_3.Models
         [StringLength(100)]
         public string Title { get; set; }
         [Required]
-        [Range(1,double.MaxValue,ErrorMessage ="Vui lòng nh?p l?i giá")]
+        [Range(1,double.MaxValue,ErrorMessage ="please input Price again")]
         public double? Price { get; set; }
 
         [StringLength(100)]
         public string Description { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(4,MinimumLength =4,ErrorMessage ="Input Year again")]
         public string Year { get; set; }
 
         
         [StringLength(100)]
+       
         public string img_path { get; set; }
 
         public int artist_id { get; set; }

@@ -11,15 +11,15 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.artist.Certificate)
+            @Html.DisplayName("Artist")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.artist.Certificate)
+            @Html.DisplayFor(model => model.artist.customer.FullName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.category.Name)
+            @Html.DisplayName("Thể loại tranh")
         </dt>
 
         <dd>
@@ -59,11 +59,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.img_path)
+            @Html.DisplayName("")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.img_path)
+            <img src="~/@Model.img_path" style="width:300px;height:300px" />
         </dd>
 
         <dt>
@@ -71,12 +71,27 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.status)
+            @ViewBag.Status
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (Session["idArtist"] != null)
+    {
+        if (Model.status == 0)
+        {
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+        }
+
+        @Html.DisplayName(" | ");
+
+        @Html.ActionLink("Back to List", "Index");
+    }
+    else
+    {
+        @Html.ActionLink("Back to List", "Artwork", "TestHome")
+    }
+
+
 </p>

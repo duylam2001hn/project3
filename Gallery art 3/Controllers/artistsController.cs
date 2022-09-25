@@ -17,33 +17,32 @@ namespace Gallery_art_3.Controllers
         // GET: artists
         public ActionResult Index()
         {
-            if (/*Session["idUser"] != null && */Session["idArtist"] != null)
-            {
+           
                 var artists = db.artists.Include(a => a.customer);
                 return View(artists.ToList());
-            }
-            return RedirectToAction("Login", "customers");
+           
         }
 
         // GET: artists/Details/5
         public ActionResult Details(int? id)
         {
-            int id_artist = Int32.Parse(Session["idArtist"].ToString());
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            artist artist = db.artists.Find(id_artist);
-            
-            var detail_artist = artist.customer.ToString();
-          
-            ViewBag.Cus = detail_artist;
-            
-            if (artist == null)
+        if (Session["idArtist"] != null)
             {
-                return HttpNotFound();
+                int id_artist = Int32.Parse(Session["idArtist"].ToString());
+               
+                artist artist = db.artists.Find(id_artist);
+            
+                var detail_artist = artist.customer.ToString();
+          
+                ViewBag.Cus = detail_artist;
+            
+                if (artist == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(artist);
             }
-            return View(artist);
+            return RedirectToAction("Logout", "customers");
         }
 
         // GET: artists/Create
@@ -61,14 +60,14 @@ namespace Gallery_art_3.Controllers
         public ActionResult Create([Bind(Include = "Id,Certificate,Description,Style,Expire_date,Cus_id")] artist artist)
         {
           
-            artist.Cus_id =Int32.Parse(Session["idUser"].ToString());
+            artist.Cus_id =int.Parse(Session["idUser"].ToString());
             artist.Expire_date = Session["ExpireDate"].ToString();
 
             if (ModelState.IsValid)
             {
                 db.artists.Add(artist);
                 db.SaveChanges();
-                return RedirectToAction("Logout","customers");
+                
             }
             
 
@@ -87,7 +86,7 @@ namespace Gallery_art_3.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Cus_id = new SelectList(db.customers, "Id", "FullName", artist.Cus_id);
+            
             return View(artist);
         }
 
@@ -96,15 +95,29 @@ namespace Gallery_art_3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Certificate,Description,Style,Expire_date,Cus_id")] artist artist)
+        public ActionResult Edit([Bind(Include = "Id,Certificate,Description,Style,Expire_date,Cus_id")] artist artist, [Bind(Exclude = "Password")] customer customer )
         {
+           
             if (ModelState.IsValid)
             {
-                db.Entry(artist).State = EntityState.Modified;
+                artist edit_artist = db.artists.Find(artist.Id);
+                edit_artist.Certificate = artist.Certificate;
+                edit_artist.Description = artist.Description;
+                edit_artist.Style = artist.Style;
+
+                int id_cus = int.Parse(Session["idUser"].ToString());
+                customer edit_customer = db.customers.Find(id_cus);
+                edit_customer.Address = customer.Address;
+                edit_customer.FullName = customer.FullName;
+                edit_customer.Email = customer.Email;
+                edit_customer.City = customer.City;
+
+                db.Entry(edit_customer).State = EntityState.Modified;
+                db.Entry(edit_artist).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+               return RedirectToAction("Details");
             }
-            ViewBag.Cus_id = new SelectList(db.customers, "Id", "FullName", artist.Cus_id);
+            
             return View(artist);
         }
 

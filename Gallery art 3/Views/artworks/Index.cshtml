@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Gallery_art_3.Models.artwork>
+﻿@*@model IEnumerable<Gallery_art_3.Models.artwork>*@
+@model PagedList.IPagedList<Gallery_art_3.Models.artwork>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
@@ -11,67 +13,95 @@
 </p>
 <table class="table">
     <tr>
+
         <th>
-            @Html.DisplayNameFor(model => model.artist.Certificate)
+            @Html.DisplayName("Thể loại")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.category.Name)
+            @Html.DisplayName("Title")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayName("Price")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayName("Description")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayName("Year")
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Year)
-        </th>
+
         <th>
             @Html.DisplayName("Picture")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.status)
+            @Html.DisplayName("status")
         </th>
+
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.artist.Certificate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.category.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Year)
-        </td>
-        <td>
-            <img style="width:100px;height:100px" src="~/@item.img_path" />
-        </td>
+    @foreach (var item in Model)
+    {
 
-       
-        <td>
-            @ViewBag.Status
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-        </td>
-    </tr>
-}
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+
+            <td>
+                <img style="width:150px;height:150px" src="~/@item.img_path" />
+            </td>
+
+            <td>
+                @{ var status = item.status;}
+                @if (status == 1)
+                {
+                    ViewBag.Status = "Đã Bán";
+                }
+                else if (status == 2)
+                {
+                    ViewBag.Status = "Đang đấu giá";
+                }
+                else
+                {
+                    ViewBag.Status = "Đang bán";
+                }
+                @ViewBag.Status
+            </td>
+
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @if (status == 0)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                }
+
+
+
+            </td>
+        </tr>
+
+    }
 
 </table>
+</br>
+</br>
+<!-- Thêm phân trang vào -->
+Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page }))
+<!-- Kết thúc -->

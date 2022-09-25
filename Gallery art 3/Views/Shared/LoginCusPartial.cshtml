@@ -1,8 +1,13 @@
 ﻿@if (Session["idUser"] !=null)
 {
         <ul class="nav navbar-nav navbar-right">
+            @{var controller = "customers";}
+            @if (Session["idArtist"] != null)
+            {
+                controller = "artists";
+            }
             <li>
-                @Html.ActionLink("Xin chào " + Session["fullname"], "Index", "customers" ,routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink("Xin chào " + Session["fullname"], "Details", controller ,routeValues: null, htmlAttributes: new { title = "Manage" })
             </li>
             <li>@Html.ActionLink("Log out","Logout","customers")</li>
         </ul>

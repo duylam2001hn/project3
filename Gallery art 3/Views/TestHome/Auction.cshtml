@@ -1,7 +1,45 @@
-﻿
+﻿@model IEnumerable<Gallery_art_3.Models.bid>
 @{
     ViewBag.Title = "Auction";
 }
 
-<h2>Aution</h2>
+<h2>TestAution</h2>
+@using (Html.BeginForm())
+{
+    @Html.TextBox("search")
+    <button type="submit">Search</button>
+}
+@foreach (var item in Model)
+{
+
+
+    <div style="display:inline-block;margin:8px">
+
+        <div>@Html.DisplayFor(modelItem => item.artwork.Title)</div>
+        <div>@Html.DisplayFor(modelItem => item.artwork.category.Name)</div>
+
+        <div><img src="~/@item.artwork.img_path" style="width:200px;height:200px" /></div>
+        <div>
+
+            @Html.ActionLink("Xem", "Details", "bids", new { id = item.Id }, null)
+        </div>
+        <div>
+            @{ var status = item.artwork.status;}
+            @if (status == 1)
+            {
+                ViewBag.Status = "Đã Bán";
+            }
+            else if (status == 2)
+            {
+                ViewBag.Status = "Đang đấu giá";
+            }
+            else
+            {
+                ViewBag.Status = "Đang bán";
+            }
+            @ViewBag.Status
+        </div>
+    </div>
+
+}
 

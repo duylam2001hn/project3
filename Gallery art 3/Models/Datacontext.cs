@@ -27,6 +27,15 @@ namespace Gallery_art_3.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Update_bidding>()
+               .Property(e => e.Amount)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<Update_bidding>()
+                .Property(e => e.Time_update)
+                .IsUnicode(false);
+
+
             modelBuilder.Entity<artist>()
                 .Property(e => e.Certificate)
                 .IsUnicode(false);
@@ -47,7 +56,9 @@ namespace Gallery_art_3.Models
                 .HasMany(e => e.artworks)
                 .WithRequired(e => e.artist)
                 .HasForeignKey(e => e.artist_id)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(false)
+                
+                ;
 
             modelBuilder.Entity<artwork>()
                 .Property(e => e.Title)
@@ -74,7 +85,8 @@ namespace Gallery_art_3.Models
             modelBuilder.Entity<artwork>()
                 .HasMany(e => e.favorite_artwork)
                 .WithOptional(e => e.artwork)
-                .HasForeignKey(e => e.Artwork_id);
+                .HasForeignKey(e => e.Artwork_id)
+            .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<artwork>()
                 .HasMany(e => e.order_detail)
@@ -93,7 +105,8 @@ namespace Gallery_art_3.Models
             modelBuilder.Entity<bid>()
                 .HasMany(e => e.update_bidding)
                 .WithOptional(e => e.bid)
-                .HasForeignKey(e => e.Bid_id);
+                .HasForeignKey(e => e.Bid_id)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<category>()
                 .Property(e => e.Name)
@@ -134,7 +147,8 @@ namespace Gallery_art_3.Models
             modelBuilder.Entity<customer>()
                 .HasMany(e => e.favorite_artwork)
                 .WithOptional(e => e.customer)
-                .HasForeignKey(e => e.Cus_id);
+                .HasForeignKey(e => e.Cus_id)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<customer>()
                 .HasMany(e => e.order_buy)
@@ -145,7 +159,8 @@ namespace Gallery_art_3.Models
             modelBuilder.Entity<customer>()
                 .HasMany(e => e.update_bidding)
                 .WithOptional(e => e.customer)
-                .HasForeignKey(e => e.Cus_id);
+                .HasForeignKey(e => e.Cus_id)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<order_buy>()
                 .Property(e => e.Date_start)
