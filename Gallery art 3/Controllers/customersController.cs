@@ -432,9 +432,9 @@ namespace Gallery_art_3.Controllers
 
                 string expire_link  = end_link_reset(exist_cus).ToString();
 
-                string email_from = "duylam2001hn@gmail.com";
+                string email_from = "";
                 var email_to = customer.Email;
-                string password_app = "kpxdjruhrwhajugf";
+                string password_app = "";
                 string Title = "Reset Password";
                 SmtpClient SmtpMail = new SmtpClient();
                 
