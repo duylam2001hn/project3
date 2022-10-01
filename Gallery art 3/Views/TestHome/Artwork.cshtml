@@ -5,13 +5,31 @@
 }
 
 
-<h2>TestViewArtwork</h2>
+<!--<h2>TestViewArtwork</h2>
 @using (Html.BeginForm())
-{ 
+{
     @Html.TextBox("search")
     <button type="submit">Search</button>
+}-->
+
+@foreach (var item in Model)
+{
+
+
+    <div style="display: inline-block; margin: 20px;padding:5px">
+
+        <div>@Html.DisplayFor(modelItem => item.Title)</div>
+        <div style="margin-bottom:10px">@Html.DisplayFor(modelItem => item.category.Name)</div>
+        <div><img src="~/@item.img_path" style="width:200px;height:200px" /></div>
+        <div>
+
+            @Html.ActionLink("Xem", "Details", "artworks", new { id = item.Id }, null)
+        </div>
+    </div>
+
 }
 
+<<<<<<< HEAD
    @foreach (var item in Model)
    {
 
@@ -38,4 +56,6 @@
 
    }
 
+=======
+>>>>>>> 58773d7c8487989bcf7ffabbeb8b934628f7efd2
 

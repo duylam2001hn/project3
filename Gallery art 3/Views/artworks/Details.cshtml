@@ -4,7 +4,8 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+
+<!--
 
 <div>
     <h4>artwork</h4>
@@ -88,6 +89,7 @@
     }
 
 
+<<<<<<< HEAD
 </p>
 <p>
     @Html.ActionLink("List favorite artwork", "Favorite_art","customers")
@@ -95,3 +97,86 @@
 <p>
     @Html.ActionLink("Back to Artwork", "Artwork", "TestHome")
 </p>
+=======
+</p>-->
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="~/Home/Index">Home</a>
+                <a class="breadcrumb-item text-dark" href="~/artworks/Index">ArtWorks</a>
+                <span class="breadcrumb-item active">Artwork Detail</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Shop Detail Start -->
+<div class="container-fluid pb-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-5 mb-30">
+            <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner bg-light">
+                    <div class="carousel-item active">
+                        <img class="w-100 h-100" src="~/@Model.img_path" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7 h-auto mb-30">
+            <div class="h-100 bg-light p-30">
+                <h3>Category: @Html.DisplayFor(model => model.category.Name)</h3>
+                <h3 class="font-weight-semi-bold mb-4">Price: @Html.DisplayFor(model => model.Price)</h3>
+                <p class="mb-4">
+                    
+                    Artist: @Html.DisplayFor(model => model.artist.customer.FullName)<br />
+                    Title: @Html.DisplayFor(model => model.Title)<br />
+                    Decription: @Html.DisplayFor(model => model.Description)<br />
+                    Year: @Html.DisplayFor(model => model.Year)<br />
+                    Status: @ViewBag.Status<br />
+                <p>
+                    @if (Session["idArtist"] != null)
+                    {
+                        if (Model.status == 0)
+                        {
+                            @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+                        }
+
+                        @Html.DisplayName(" | ");
+
+                        @Html.ActionLink("Back to List", "Index");
+                    }
+                    <!--else
+    {
+        @Html.ActionLink("Back to List", "Artwork", "TestHome")
+    }-->
+
+
+                </p>
+                <div class="d-flex align-items-center mb-4 pt-2">
+                    <div class="input-group quantity mr-3" style="width: 130px;">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary btn-minus">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                        <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary btn-plus">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary px-3">
+                        <i class="fa fa-shopping-cart mr-1"></i> Add To
+                        Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Shop Detail End -->
+>>>>>>> 58773d7c8487989bcf7ffabbeb8b934628f7efd2
