@@ -24,6 +24,15 @@
             @Html.ActionLink("Xem", "Details", "bids", new { id = item.Id }, null)
         </div>
         <div>
+
+            @Html.ActionLink("Thích sản phẩm", "Add_Favorite_art", "customers", new { id_artwork = item.artwork.Id }, null)
+
+
+        </div>
+
+       
+
+        <div>
             @{ var status = item.artwork.status;}
             @if (status == 1)
             {
@@ -39,6 +48,7 @@
             }
             @ViewBag.Status
         </div>
+
     </div>
 
 }

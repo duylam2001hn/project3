@@ -11,17 +11,20 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using common;
+using PagedList;
 
 namespace Gallery_art_3.Controllers
 {
     public class customersController : Controller
     {
+        private const string CusSession = "idUser";
         private Datacontext db = new Datacontext();
 
         // GET: customers
         public ActionResult Index()
         {
-            if (Session["idUser"] != null)
+            if (Session[CusSession] != null)
             {
                 return View(db.customers.ToList());
             }
@@ -35,7 +38,7 @@ namespace Gallery_art_3.Controllers
             //{
             //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             //}
-            id = int.Parse(Session["idUser"].ToString());
+            id = int.Parse(Session[CusSession].ToString());
             customer customer = db.customers.Find(id);
             if (customer == null)
             {
@@ -77,7 +80,7 @@ namespace Gallery_art_3.Controllers
                         {
                             //Sau sửa phần này điều hướng về trang chủ Home
                             ViewBag.Message = "Register Successfully";
-                            return View("Register");
+                            return View();
                         }
                         return RedirectToAction("becomeartist");
                         
@@ -118,8 +121,8 @@ namespace Gallery_art_3.Controllers
                     //add session
                     Session["FullName"] = datacus.FirstOrDefault().FullName;
                     Session["Email"] = datacus.FirstOrDefault().Email;
-                    Session["idUser"] = datacus.FirstOrDefault().Id;
-                    int user_id = int.Parse(Session["idUser"].ToString());
+                    Session[CusSession] = datacus.FirstOrDefault().Id;
+                    int user_id = int.Parse(Session[CusSession].ToString());
                     if(datacus.FirstOrDefault().artists.Count() > 0)
                     {
                         //from t in db.artists where t.Id == user_id
@@ -266,13 +269,13 @@ namespace Gallery_art_3.Controllers
         public ActionResult becomeartist(string artist)
         {
             
-            if (Session["idUser"] == null)
+            if (Session[CusSession] == null)
             {
                 int id_cus = db.customers.ToList().Last().Id;
-                Session["idUser"] = id_cus;
+                Session[CusSession] = id_cus;
             }
 
-            int idcus = int.Parse(Session["idUser"].ToString());
+            int idcus = int.Parse(Session[CusSession].ToString());
 
             var artist_exist = db.artists.Where(s => s.Cus_id.Equals(idcus)) ;
             int count = artist_exist.Count();
@@ -328,11 +331,6 @@ namespace Gallery_art_3.Controllers
         }
 
 
-
-
-
-
-
         //[HttpGet]
         //public ActionResult ChangePassword(int? id)
         //{
@@ -361,44 +359,7 @@ namespace Gallery_art_3.Controllers
         //    return View(customer);
         //}
 
-
-        public bool SendMail(string _from, string _to, string _subject, string _body, SmtpClient client)
-        {
-            // Tạo nội dung Email
-            MailMessage message = new MailMessage(
-                from: _from,
-                to: _to,
-                subject: _subject,
-                body: _body
-            );
-            message.BodyEncoding = System.Text.Encoding.UTF8;
-            message.SubjectEncoding = System.Text.Encoding.UTF8;
-            message.IsBodyHtml = true;
-            message.ReplyToList.Add(new MailAddress(_from));
-            message.Sender = new MailAddress(_from);
-
-            try
-            {
-                client.Send(message);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                
-                return false;
-            }
-        }
-
-        public DateTime end_link_reset(int count)
-        {
-            
-            DateTime Link_recieve = DateTime.Now;
-            DateTime expire_link = Link_recieve.AddMinutes(2);
-
-            return expire_link;
-
-        }
-
+        //}
 
 
 
@@ -415,7 +376,7 @@ namespace Gallery_art_3.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var user = await UserManager.FindByNameAsync(model.Email);
+               
 
                 var cus = db.customers.Where(s => s.Email.Equals(customer.Email));
 
@@ -427,47 +388,23 @@ namespace Gallery_art_3.Controllers
                 {
                     return View("ForgotPasswordConfirmation");
                 }
-                
-                
+                DateTime Link_recieve = DateTime.Now;
+                DateTime expire = Link_recieve.AddMinutes(2);
 
-                string expire_link  = end_link_reset(exist_cus).ToString();
+                string expire_link  = expire.ToString();
 
-                string email_from = "";
+              
                 var email_to = customer.Email;
-                string password_app = "";
-                string Title = "Reset Password";
-                SmtpClient SmtpMail = new SmtpClient();
-                
-                
-                
-                SmtpMail.Host = "smtp.gmail.com";
-                SmtpMail.Port = 587;
-                SmtpMail.EnableSsl = true;
-                SmtpMail.DeliveryMethod = SmtpDeliveryMethod.Network;
-                
-                SmtpMail.UseDefaultCredentials = false;
-                SmtpMail.Credentials = new NetworkCredential(email_from, password_app);
+              
                 var callbackUrl = Url.Action("ResetPassword","customers", new { time = expire_link }, protocol: Request.Url.Scheme);
                 string content = "From Gallery Art . Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
-                var result = SendMail(email_from, email_to, Title, content,SmtpMail);
+                
+                new MailHelper().SendMail(email_to,"Reset Password từ Gallery Art",content);
+             
+                return RedirectToAction("ForgotPasswordConfirmation");
+               
 
-               if(result == true)
-                {
-                    return RedirectToAction("ForgotPasswordConfirmation");
-                }
-                    
- 
-                //string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                //var callbackUrl = Url.Action("ResetPassword", "Account", new { cusId = id_cus}, protocol: Request.Url.Scheme);
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
-
-            // If we got this far, something failed, redisplay form
             return View(customer);
         }
 
@@ -530,6 +467,52 @@ namespace Gallery_art_3.Controllers
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
+        }
+
+        public ActionResult Add_Favorite_art(int id_artwork)
+        {
+
+            if (Session[CusSession] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            int id_cus = int.Parse(Session[CusSession].ToString());
+            var check = db.favorite_artwork.Where(
+                fa => fa.Artwork_id==id_artwork && fa.Cus_id == id_cus).Count();
+            favorite_artwork favorite_Artwork = new favorite_artwork();
+            favorite_Artwork.Artwork_id = id_artwork;
+            favorite_Artwork.Cus_id = id_cus;
+            db.favorite_artwork.Add(favorite_Artwork);
+
+            if (check != 1)
+            {
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Artwork", "TestHome");
+          
+           
+        }
+
+        public ActionResult Favorite_art()
+        {
+            int id_cus = int.Parse(Session[CusSession].ToString());
+            var favorite_art = db.favorite_artwork.ToList().Where(s=>s.Cus_id == id_cus);
+            return View(favorite_art);
+        }
+
+        public ActionResult purchase_history(int? page)
+        {
+
+            if (page == null) page = 1;
+
+          
+            int pageSize = 4;
+
+            int pageNumber = (page ?? 1);
+            int id_cus = int.Parse(Session[CusSession].ToString());
+            var purchase_history = db.order_detail.Where(s => s.order_buy.Cus_id == id_cus).OrderByDescending(s=>s.order_buy.Date_start);
+            return View(purchase_history.ToPagedList(pageNumber, pageSize));
         }
 
 

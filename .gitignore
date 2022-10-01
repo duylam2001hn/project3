@@ -55,6 +55,7 @@ TestResults/
 ######################
 .DS_Store?
 ehthumbs.db
+debug
 Icon?
 Thumbs.db
 [Bb]in

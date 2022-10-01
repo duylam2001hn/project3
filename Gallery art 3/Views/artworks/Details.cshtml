@@ -79,12 +79,6 @@
 <p>
     @if (Session["idArtist"] != null)
     {
-        if (Model.status == 0)
-        {
-            @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-        }
-
-        @Html.DisplayName(" | ");
 
         @Html.ActionLink("Back to List", "Index");
     }
@@ -94,4 +88,10 @@
     }
 
 
+</p>
+<p>
+    @Html.ActionLink("List favorite artwork", "Favorite_art","customers")
+</p>
+<p>
+    @Html.ActionLink("Back to Artwork", "Artwork", "TestHome")
 </p>

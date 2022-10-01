@@ -186,6 +186,7 @@
     <Compile Include="Controllers\customersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\TestHomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -193,6 +194,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\artist.cs" />
     <Compile Include="Models\artwork.cs" />
+    <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\Datacontext.cs" />
     <Compile Include="Models\favorite_artwork.cs" />
     <Compile Include="Models\bid.cs" />
@@ -213,6 +215,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\template\neworder.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -299,6 +302,11 @@
     <Content Include="Views\customers\ResetPassword.cshtml" />
     <Content Include="Views\customers\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\customers\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\customers\Favorite_art.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\ThanhToan.cshtml" />
+    <Content Include="Views\Cart\Success.cshtml" />
+    <Content Include="Views\customers\purchase_history.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -316,6 +324,12 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\common\common.csproj">
+      <Project>{B23C0BDE-4751-43E3-BDEC-4C898E69E548}</Project>
+      <Name>common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

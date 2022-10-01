@@ -111,3 +111,5 @@ D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.dll
 D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.Mvc.dll
 D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.xml
 D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\PagedList.Mvc.xml
+D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\common.dll
+D:\Aptech\VisualStudioCode2022\Gallery art 3\Gallery art 3\bin\common.pdb

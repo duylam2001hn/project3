@@ -50,8 +50,8 @@ namespace Gallery_art_3.Controllers
         {
             
             int id_Artist =int.Parse(Session["idArtist"].ToString());
-            var artist = db.artworks.Where(a => a.artist_id.Equals(id_Artist));
-            ViewBag.Art_id = new SelectList(artist, "Id", "Title");
+            var artwork = db.artworks.Where(a => a.artist_id.Equals(id_Artist));
+            ViewBag.Art_id = new SelectList(artwork.Where(s=>s.status==0), "Id", "Title");
             
             return View();
         }
@@ -63,7 +63,7 @@ namespace Gallery_art_3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Start_Price,End_Price,Art_id,Date_start,Date_end")] bid bid)
         {
-            int id_artist =bid.Art_id;
+            int id_artwork =bid.Art_id;
             double day_add = double.Parse(Request["add_day"].ToString());
             string date_start = DateTime.Now.ToString();
             DateTime now = DateTime.Now;
@@ -72,12 +72,12 @@ namespace Gallery_art_3.Controllers
             bid.Date_start = date_start;
             bid.Date_end = date_end;
             bid.End_Price = 0;
-            changeStatusbid(id_artist);
+            change_Status_Artwork(id_artwork);
             if (ModelState.IsValid)
             {
                 db.bids.Add(bid);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","artworks");
             }
 
             ViewBag.Art_id = new SelectList(db.artworks, "Id", "Title", bid.Art_id);
@@ -162,9 +162,9 @@ namespace Gallery_art_3.Controllers
             return Json(html, JsonRequestBehavior.AllowGet);
         }
 
-        public void changeStatusbid (int id_artist)
+        public void change_Status_Artwork (int id_artwork)
         {
-            var artwork = db.artworks.Find(id_artist);
+            var artwork = db.artworks.Find(id_artwork);
             artwork.status = 2;
             db.Entry(artwork).State = EntityState.Modified;
             db.SaveChanges();

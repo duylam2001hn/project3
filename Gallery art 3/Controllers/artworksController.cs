@@ -15,17 +15,18 @@ namespace Gallery_art_3.Controllers
 {
     public class artworksController : Controller
     {
+        private const string ArtistSession = "idArtist";
         private Datacontext db = new Datacontext();
 
         // GET: artworks
         public ActionResult Index(int? page)
         {
-            if (Session["idArtist"] != null)
+            if (Session[ArtistSession] != null)
             {
 
                 if (page == null) page = 1;
 
-                int artist_id = int.Parse(Session["idArtist"].ToString());
+                int artist_id = int.Parse(Session[ArtistSession].ToString());
 
                 var artworks = db.artworks.Where(s => s.artist_id == artist_id).OrderBy(s=>s.Id);
                 int pageSize = 4;
@@ -60,7 +61,7 @@ namespace Gallery_art_3.Controllers
         // GET: artworks/Create
         public ActionResult Create()
         {
-            if (Session["idArtist"] != null)
+            if (Session[ArtistSession] != null)
             {
                 ViewBag.cate_id = new SelectList(db.categories, "Id", "Name");
             return View();
@@ -78,7 +79,7 @@ namespace Gallery_art_3.Controllers
            
                 if (ModelState.IsValid)
                 {
-                    int id = int.Parse(Session["idArtist"].ToString());
+                    int id = int.Parse(Session[ArtistSession].ToString());
                     artwork.artist_id = id;
                     artwork.status = 0;
                     if (uploadhinh != null && uploadhinh.ContentLength > 0)
@@ -135,6 +136,9 @@ namespace Gallery_art_3.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+           
+
+
             artwork artwork = db.artworks.Find(id);
             if (artwork == null)
             {
@@ -164,7 +168,7 @@ namespace Gallery_art_3.Controllers
                 edit_data.Description = artwork.Description;
                 if(artwork.status == 0)
                 {
-                    int id = int.Parse(Session["idArtist"].ToString());
+                    int id = int.Parse(Session[ArtistSession].ToString());
                     if (uploadhinh != null && uploadhinh.ContentLength > 0)
                     {
                         var findArtist = db.artists.Where(s => s.Id.Equals(id)).ToList();

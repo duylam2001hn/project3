@@ -25,7 +25,16 @@
                 
             @Html.ActionLink("Xem", "Details", "artworks", new { id = item.Id }, null)
             </div>
+            <div>
+                
+                    @Html.ActionLink("Thích sản phẩm", "Add_Favorite_art", "customers", new { id_artwork = item.Id }, null)
+               
+
+            </div>
+            <div>@Html.ActionLink("Add Cart", "ThemVaoGio", "Cart", new { SanPhamID = item.Id }, null)</div>
+            
         </div>
+        
 
    }
 

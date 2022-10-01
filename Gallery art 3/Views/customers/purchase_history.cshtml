@@ -1,0 +1,67 @@
+﻿@*@model  IEnumerable<Gallery_art_3.Models.order_detail>*@
+@model PagedList.IPagedList<Gallery_art_3.Models.order_detail>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Purchase History";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayName("Title")
+        </th>
+        <th>
+            @Html.DisplayName("Price")
+        </th>
+
+        <th>
+            @Html.DisplayName("Ngày mua hàng")
+        </th>
+
+        <th>
+            @Html.DisplayName("Picture")
+        </th>
+        <th></th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.artwork.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.artwork.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.order_buy.Date_start)
+            </td>
+
+            <td>
+                <img style="width:70px;height:60px" src="~/@item.artwork.img_path" />
+            </td>
+
+            <td>
+                @Html.ActionLink("Details", "Details", "artworks", null, new { id = item.Art_id })
+
+            </td>
+        </tr>
+
+    }
+
+</table>
+</br>
+</br>
+<!-- Thêm phân trang vào -->
+Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("purchase_history",
+    new { page }))
+<!-- Kết thúc -->

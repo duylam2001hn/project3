@@ -39,6 +39,7 @@ namespace Gallery_art_3.Models
         
         [StringLength(100)]
         [DataType(DataType.Password)]
+        
         public string Password { get; set; }
 
         [Required]

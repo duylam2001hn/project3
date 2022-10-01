@@ -34,17 +34,10 @@ namespace Gallery_art_3.Models
             {
                 isvalid = isValidImageFile(bytFile, FileContentType);//we are going call this method
             }
-            //else if (flType == FileType.Video)
-            //{
-            //    isvalid = isValidVideoFile(bytFile, FileContentType);
-            //}
-            //else if (flType == FileType.PDF)
-            //{
-            //    isvalid = isValidPDFFile(bytFile, FileContentType);
-            //}
+        
             return isvalid;
         }
-        public static bool isValidImageFile(byte[] bytFile, String FileContentType)
+        public static bool isValidImageFile(byte[] bytFile, string FileContentType)
         {
             bool isvalid = false;
 
@@ -78,7 +71,7 @@ namespace Gallery_art_3.Models
                 if (bytFile.Length >= 4)
                 {
                     int j = 0;
-                    for (Int32 i = 0; i <= 3; i++)
+                    for (int i = 0; i <= 3; i++)
                     {
                         if (bytFile[i] == chkBytejpg[i])
                         {
