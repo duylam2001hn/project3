@@ -25,7 +25,6 @@ namespace Gallery_art_3.Controllers
                        s.artist.customer.FullName.Contains(search)
                     );
             }
-
             return View(data);
         }
 

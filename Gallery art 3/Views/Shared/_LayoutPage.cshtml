@@ -158,13 +158,13 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a href="~/" class="nav-item nav-link active">Home</a>
                             <a href="~/artworks/Index" class="nav-item nav-link">Artworks</a>
-                            <a href="detail.html" class="nav-item nav-link">Artist</a>
+                            <a href="~/artists/Index" class="nav-item nav-link">Artist</a>
 
                             <!--<div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                                 <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                                 <a href="checkout.html" class="dropdown-item">Checkout</a>
                             </div>-->
-                            <a href="detail.html" class="nav-item nav-link">Auctions</a>
+                            <a href="~/bids/Index" class="nav-item nav-link">Auctions</a>
                             <a href="contact.html" class="nav-item nav-link">News</a>
                             <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
@@ -179,8 +179,8 @@
                             </a>
                         </div>-->
                         <div class="navbar-nav mr-auto px-4">
-                            <a href="contact.html" class="nav-item nav-link">Register</a>
-                            <a href="contact.html" class="nav-item nav-link">Login</a>
+                            <a href="~/Account/Register" class="nav-item nav-link">Register</a>
+                            <a href="~/Account/Login" class="nav-item nav-link">Login</a>
                         </div>
                     </div>
                 </nav>
@@ -221,6 +221,7 @@
     <!-- Products Start -->
     <div class="container-fluid pt-5 pb-3">
         @RenderBody()
+        @RenderSection("scripts", required: false)
     </div>
     <!-- Products End -->
     <!-- Footer Start -->

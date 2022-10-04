@@ -17,7 +17,13 @@ namespace Gallery_art_3
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "TestHome", action = "Artwork", id = UrlParameter.Optional }
-            );
+            ) ;
+            routes.MapRoute(
+    name: "Default1",
+    url: "{controller}/{action}/{id}",
+    defaults: new { controller = "artworks", action = "Index", id = UrlParameter.Optional },
+    namespaces: new string[] { "artworksController.Controller" }
+);
         }
     }
 }

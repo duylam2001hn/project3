@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Gallery art 3",
+    "\\Gallery art 3\\App_Start",
+    "\\Gallery art 3\\Controllers",
+    "\\Gallery art 3\\Views",
+    "\\Gallery art 3\\Views\\Shared",
+    "\\Gallery art 3\\Views\\TestHome"
   ],
-  "SelectedNode": "\\Gallery art 3.sln",
+  "SelectedNode": "\\Gallery art 3\\App_Start\\RouteConfig.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -11,6 +11,11 @@
     @Html.TextBox("search")
     <button type="submit">Search</button>
 }-->
+@using (Html.BeginForm())
+{
+    @Html.TextBox("search")
+    <button type="submit">Search</button>
+}
 
 @foreach (var item in Model)
 {
