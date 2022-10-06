@@ -30,6 +30,17 @@ namespace Gallery_art_3.Controllers
             int result = TimeBid(id);
             if (result > 0 && bid.artwork.status==2)
             {
+                var danhsach = db.update_bidding
+                .OrderByDescending(s => s.Amount).ToList()
+                .Where(s => s.Bid_id.Equals(id));
+
+                var email_to = danhsach.FirstOrDefault().customer.Email;
+                var end_price = danhsach.FirstOrDefault().Amount;
+                var cus_id = danhsach.FirstOrDefault().Cus_id;
+
+                var callbackUrl = Url.Action("ThanhToan", "bids", new { total = end_price,cus_id = cus_id,bid_id=id }, protocol: Request.Url.Scheme);
+                string content = "From Gallery Art. Complete your bills by clicking <a href=\"" + callbackUrl + "\">here</a>";
+                new MailHelper().SendMail(email_to, "Thanh Toán Hóa đơn đấu giá", content);
                 Update_end_bidding(id);
             }
            
