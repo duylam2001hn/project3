@@ -18,7 +18,10 @@ namespace Gallery_art_3.Models
 
         [StringLength(100)]
         public string Email { get; set; }
-
+        
+        [StringLength(100)]
+        public string Username { get; set; }
+        
         public int Role { get; set; }
     }
 }
