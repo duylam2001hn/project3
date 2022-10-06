@@ -187,7 +187,7 @@ namespace Gallery_art_3.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<user>()
-                .Property(e => e.Address)
+                .Property(e => e.Username)
                 .IsUnicode(false);
 
             modelBuilder.Entity<user>()
