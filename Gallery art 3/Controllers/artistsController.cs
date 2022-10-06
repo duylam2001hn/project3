@@ -88,7 +88,7 @@ namespace Gallery_art_3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Certificate,Description,Style,Expire_date,Cus_id")] artist artist, [Bind(Exclude = "Password")] customer customer )
+        public ActionResult Edit([Bind(Include = "Id,Certificate,Description,Style,Expire_date,Cus_id,City,Address,Country")] artist artist, [Bind(Exclude = "Password")] customer customer )
         {
            
             if (ModelState.IsValid)
@@ -97,13 +97,17 @@ namespace Gallery_art_3.Controllers
                 edit_artist.Certificate = artist.Certificate;
                 edit_artist.Description = artist.Description;
                 edit_artist.Style = artist.Style;
+                 edit_artist.Address = artist.Address;
+                edit_artist.City = artist.City;
+                edit_artist.Country = artist.Country;
+
 
                 int id_cus = int.Parse(Session["idUser"].ToString());
                 customer edit_customer = db.customers.Find(id_cus);
-                edit_customer.Address = customer.Address;
+                
                 edit_customer.FullName = customer.FullName;
                 edit_customer.Email = customer.Email;
-                edit_customer.City = customer.City;
+
 
                 db.Entry(edit_customer).State = EntityState.Modified;
                 db.Entry(edit_artist).State = EntityState.Modified;
