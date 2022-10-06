@@ -72,9 +72,11 @@ namespace Gallery_art_3.Controllers
             bid.Date_start = date_start;
             bid.Date_end = date_end;
             bid.End_Price = 0;
-            change_Status_Artwork(id_artwork);
+            bid.status = 0;
+            
             if (ModelState.IsValid)
             {
+                change_Status_Artwork(id_artwork);
                 db.bids.Add(bid);
                 db.SaveChanges();
                 return RedirectToAction("Index","artworks");
@@ -258,16 +260,17 @@ namespace Gallery_art_3.Controllers
                 var moneyend = danhsach.FirstOrDefault().Amount;
 
                 bidding.End_Price = double.Parse(moneyend);
-                db.Entry(bidding).State = EntityState.Modified;
-
+                bidding.status = 1;
                 artwork.status = 1;
 
             }
             else
             {
+             bidding.status = 3;
+              
                 artwork.status = 0;
             }
-           
+            db.Entry(bidding).State = EntityState.Modified;
             db.Entry(artwork).State = EntityState.Modified;
             db.SaveChanges();   
             
