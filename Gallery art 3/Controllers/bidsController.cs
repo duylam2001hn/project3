@@ -72,7 +72,7 @@ namespace Gallery_art_3.Controllers
             bid.Date_start = date_start;
             bid.Date_end = date_end;
             bid.End_Price = 0;
-            bid.status = 0;
+            bid.Status = 0;
             
             if (ModelState.IsValid)
             {
@@ -260,13 +260,13 @@ namespace Gallery_art_3.Controllers
                 var moneyend = danhsach.FirstOrDefault().Amount;
 
                 bidding.End_Price = double.Parse(moneyend);
-                bidding.status = 1;
+                bidding.Status = 1;
                 artwork.status = 1;
 
             }
             else
             {
-             bidding.status = 3;
+             bidding.Status = 3;
               
                 artwork.status = 0;
             }
