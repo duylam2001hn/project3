@@ -33,14 +33,17 @@ namespace Gallery_art_3.Models
         
         [Required]
         [StringLength(255)]
+        [RegularExpression("^[A-Za-z0-9 ]*$", ErrorMessage = "Not Input special characters please")]
         public string Address { get; set; }
 
         [Required]
         [StringLength(255)]
+        [RegularExpression("^[A-Za-z ]*$", ErrorMessage = "Input characters in aphalbet please")]
         public string City { get; set; }
 
         [Required]
         [StringLength(50)]
+        [RegularExpression("^[A-Za-z ]*$", ErrorMessage = "Input characters in aphalbet please")]
         public string Country { get; set; }
 
         public virtual customer customer { get; set; }
