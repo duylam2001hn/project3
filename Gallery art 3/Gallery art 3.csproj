@@ -326,14 +326,14 @@
     <Content Include="Views\customers\ResetPassword.cshtml" />
     <Content Include="Views\customers\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\customers\ForgotPasswordConfirmation.cshtml" />
-<<<<<<< HEAD
+    
     <Content Include="Views\customers\Favorite_art.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Cart\ThanhToan.cshtml" />
     <Content Include="Views\Cart\Success.cshtml" />
     <Content Include="Views\customers\purchase_history.cshtml" />
-=======
     <Content Include="Theme\lib\owlcarousel\LICENSE" />
+    
     <Content Include="Theme\scss\bootstrap\scss\bootstrap-grid.scss" />
     <Content Include="Theme\scss\bootstrap\scss\bootstrap-reboot.scss" />
     <Content Include="Theme\scss\bootstrap\scss\bootstrap.scss" />
