@@ -23,7 +23,7 @@ namespace Gallery_art_3.Models
         [StringLength(100)]
         public string Date_end { get; set; }
 
-
+        public int Status { get;set; }
         
         public virtual artwork artwork { get; set; }
 
