@@ -122,20 +122,13 @@ namespace Gallery_art_3.Models
                 .Property(e => e.FullName)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<customer>()
-                .Property(e => e.Address)
-                .IsUnicode(false);
-
+            
             modelBuilder.Entity<customer>()
                 .Property(e => e.Email)
                 .IsUnicode(false);
 
             modelBuilder.Entity<customer>()
                 .Property(e => e.Password)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<customer>()
-                .Property(e => e.City)
                 .IsUnicode(false);
 
             modelBuilder.Entity<customer>()
