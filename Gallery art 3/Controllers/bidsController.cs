@@ -287,6 +287,57 @@ namespace Gallery_art_3.Controllers
             int result = DateTime.Compare(time_now,endtime);
             return result;
         }
+        
+        public ActionResult ThanhToan(int total,int cus_id,int bid_id)
+        {
+            Session["bid_id"] = bid_id ;
+            Session["cus_order"] = cus_id;
+            Session["total"] = total;
+            ViewBag.Payment_id = new SelectList(db.payment_method, "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ThanhToan([Bind(Exclude = "Date_start,Cus_id")] order_buy order)
+        {
+            int cus_id = int.Parse(Session["cus_order"].ToString());
+            int bid_id = int.Parse(Session["bid_id"].ToString());
+            DateTime date_start = DateTime.Now;
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Payment_id = new SelectList(db.payment_method, "Id", "Name");
+
+                return View();
+            }
+            var city = order.City.Trim();
+            order.City = city;
+            var phone = order.PhoneNumber.Trim();
+            order.PhoneNumber = phone;
+            var zipcode = order.Zip_code.Trim();
+            order.Zip_code = zipcode;
+            var country_code = order.Country_code.Trim();
+            order.Country_code = country_code;
+
+            order.Cus_id = cus_id;
+            order.Date_start = date_start.ToString();
+            order.status = 0;
+
+            db.order_buy.Add(order);
+
+            var bids = db.bids.Find(bid_id);
+            bids.Status = 4;
+            db.Entry(bids).State = EntityState.Modified;
+            db.SaveChanges();
+
+         
+            return RedirectToAction("Success");
+
+        }
+        public ActionResult Success()
+        {
+            return View();
+        }
 
     }
 }
