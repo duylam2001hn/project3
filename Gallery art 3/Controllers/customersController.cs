@@ -60,7 +60,7 @@ namespace Gallery_art_3.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register([Bind(Include = "Id,FullName,Address,Email,Password,City")] customer customer)
+        public ActionResult Register([Bind(Include = "Id,FullName,Email,Password")] customer customer)
         {
             string password = Request["Password"].ToString();
             int job = Int32.Parse(Request["job"].ToString());
@@ -72,6 +72,7 @@ namespace Gallery_art_3.Controllers
                     {
                     if (confirmPassword(password) == 1)
                     {
+                            customer.Status = 0;
                             customer.Password = passwordHash(Request["Password"]);
                             db.customers.Add(customer);
                             db.SaveChanges();
