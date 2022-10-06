@@ -14,14 +14,7 @@ namespace Gallery_art_3.Controllers
     {
         private Datacontext db = new Datacontext();
 
-        // GET: artists
-        public ActionResult Index()
-        {
-           
-                var artists = db.artists.Include(a => a.customer);
-                return View(artists.ToList());
-           
-        }
+       
 
         // GET: artists/Details/5
         public ActionResult Details(int? id)
@@ -121,31 +114,7 @@ namespace Gallery_art_3.Controllers
             return View(artist);
         }
 
-        // GET: artists/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            artist artist = db.artists.Find(id);
-            if (artist == null)
-            {
-                return HttpNotFound();
-            }
-            return View(artist);
-        }
-
-        // POST: artists/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            artist artist = db.artists.Find(id);
-            db.artists.Remove(artist);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        
 
         protected override void Dispose(bool disposing)
         {
