@@ -51,6 +51,19 @@ namespace Gallery_art_3.Models
             modelBuilder.Entity<artist>()
                 .Property(e => e.Expire_date)
                 .IsUnicode(false);
+                
+            modelBuilder.Entity<artist>()
+               .Property(e => e.Address)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<artist>()
+               .Property(e => e.City)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<artist>()
+               .Property(e => e.Country)
+               .IsUnicode(false);
+                
 
             modelBuilder.Entity<artist>()
                 .HasMany(e => e.artworks)
